@@ -8,10 +8,17 @@ class Students extends BaseController
 {
     public function index()
     {
-        $model = new StudentModel();
-        $data['students'] = $model->findAll();
+    $model = new \App\Models\StudentModel();
 
-        return view('students/list', $data);
+    $keyword = $this->request->getGet('keyword');
+
+    if ($keyword) {
+        $students = $model->like('name', $keyword)->findAll();
+    } else {
+        $students = $model->findAll();
+    }
+
+    return view('students/list', ['students' => $students]);
     }
 
     public function create()
