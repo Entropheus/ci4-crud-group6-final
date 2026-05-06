@@ -1,0 +1,7 @@
+<h2>Edit Student</h2>
+
+<form method="post" action="/students/update/<?= $student['id'] ?>">
+    Name: <input type="text" name="name" value="<?= $student['name'] ?>"><br>
+    Email: <input type="text" name="email" value="<?= $student['email'] ?>"><br>
+    <button type="submit">Update</button>
+</form>
