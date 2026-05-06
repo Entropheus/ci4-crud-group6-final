@@ -10,15 +10,20 @@ class Students extends BaseController
     {
     $model = new \App\Models\StudentModel();
 
-    $keyword = $this->request->getGet('keyword');
+    $keyword = $this->request->getVar('keyword');
 
     if ($keyword) {
-        $students = $model->like('name', $keyword)->findAll();
+        $students = $model->like('name', $keyword)->paginate(5);
     } else {
-        $students = $model->findAll();
+        $students = $model->paginate(5);
     }
 
-    return view('students/list', ['students' => $students]);
+    $pager = $model->pager;
+
+    return view('students/list', [
+        'students' => $students,
+        'pager' => $pager
+    ]);
     }
 
     public function create()
