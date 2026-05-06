@@ -12,3 +12,4 @@ $routes->post('/students/store', 'Students::store');
 $routes->get('/students/edit/(:num)', 'Students::edit/$1');
 $routes->post('/students/update/(:num)', 'Students::update/$1');
 $routes->get('/students/delete/(:num)', 'Students::delete/$1');
+$routes->get('/api/students', 'Api\Students::index');
