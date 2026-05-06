@@ -8,22 +8,23 @@ class Students extends BaseController
 {
     public function index()
     {
-    $model = new \App\Models\StudentModel();
+        $model = new StudentModel();
 
-    $keyword = $this->request->getVar('keyword');
+        $keyword = $this->request->getVar('keyword');
 
-    if ($keyword) {
-        $students = $model->like('name', $keyword)->paginate(5);
-    } else {
-        $students = $model->paginate(5);
-    }
+        if ($keyword) {
+            $students = $model
+                ->like('name', $keyword)
+                ->orLike('email', $keyword)
+                ->paginate(5);
+        } else {
+            $students = $model->paginate(5);
+        }
 
-    $pager = $model->pager;
-
-    return view('students/list', [
-        'students' => $students,
-        'pager' => $pager
-    ]);
+        return view('students/list', [
+            'students' => $students,
+            'pager'    => $model->pager
+        ]);
     }
 
     public function create()
@@ -36,7 +37,7 @@ class Students extends BaseController
         $model = new StudentModel();
 
         $model->save([
-            'name' => $this->request->getPost('name'),
+            'name'  => $this->request->getPost('name'),
             'email' => $this->request->getPost('email'),
         ]);
 
@@ -46,9 +47,10 @@ class Students extends BaseController
     public function edit($id)
     {
         $model = new StudentModel();
-        $data['student'] = $model->find($id);
 
-        return view('students/edit', $data);
+        return view('students/edit', [
+            'student' => $model->find($id)
+        ]);
     }
 
     public function update($id)
@@ -56,7 +58,7 @@ class Students extends BaseController
         $model = new StudentModel();
 
         $model->update($id, [
-            'name' => $this->request->getPost('name'),
+            'name'  => $this->request->getPost('name'),
             'email' => $this->request->getPost('email'),
         ]);
 
@@ -66,6 +68,8 @@ class Students extends BaseController
     public function delete($id)
     {
         $model = new StudentModel();
+
+        // 🔥 THIS NOW SETS deleted_at INSTEAD OF HARD DELETE
         $model->delete($id);
 
         return redirect()->to('/students');
